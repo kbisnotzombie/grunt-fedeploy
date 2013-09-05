@@ -31,6 +31,7 @@ module.exports = function(grunt){
 						 var jsContent = getMatches(destContents,/lib\/(.+).js.*?"/g, 1);
 						 var concatedJs = [];
 						 
+						 //not set js src and uglified path
 						 jsContent.forEach(function(t){
 							 concatedJs.push('testSrc/javascript/' + t + '.js'); 
 						 });
@@ -40,10 +41,11 @@ module.exports = function(grunt){
 						 grunt.config.set('uglify.my_target' + i + '.src','testDest/javascript/' + filenameWithoutExt + '.js');
 						 grunt.config.set('uglify.my_target' + i + '.dest','testDest/javascript.min/' + filenameWithoutExt + 'MIN.js');
 					 	 
-						 //not add hashcode to the concated js yet
-						 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<script type="text/javascript" src="' + jsLocation + '/minLib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"></script>');
+						 //in dev and prod environment,we can store the uglified js files in javascript/minlib
+						 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<script type="text/javascript" src="' + jsLocation + '/minlib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"></script>');
 						 destContents = destContents.replace(/\<duobei:script.*?src="lib\/(.+).js.*?".*?\/\>/g,'');
-						 destContents.replace(/\<script.*?src=".*?lib\/(.+).js.*?".*?\>\<\/script\>/g,'');
+						 destContents = destContents.replace(/\<script.*?src=".*?lib\/(.+).js.*?".*?\>\<\/script\>/g,'');
+						 destContents = destContents.replace(/\/minlib\//,'/lib/');
 						 
 						 fs.writeFileSync(abspath, destContents, "UTF-8");
 						 grunt.log.ok("concat js files of " + abspath + " success"); 
