@@ -18,6 +18,7 @@ module.exports = function(grunt){
 		
 //		jspSrc.forEach(function(f){
 			var ext = jspSrc.ext;
+			var jsLocation = jspSrc.jsLocation;
 			var i = 1;
 			
 			grunt.file.recurse(jspSrc.src,function(abspath, rootdir, subdir, filename){
@@ -33,10 +34,18 @@ module.exports = function(grunt){
 						 jsContent.forEach(function(t){
 							 concatedJs.push('testSrc/javascript/' + t + '.js'); 
 						 });
+						 grunt.log.ok(concatedJs); 
 						 grunt.config.set('concat.dist' + i + '.src',concatedJs);
 						 grunt.config.set('concat.dist' + i + '.dest','testDest/javascript/' + filenameWithoutExt + '.js');
 						 grunt.config.set('uglify.my_target' + i + '.src','testDest/javascript/' + filenameWithoutExt + '.js');
-						 grunt.config.set('uglify.my_target' + i + '.dest','testDest/javascript.min/' + filenameWithoutExt + '.js');
+						 grunt.config.set('uglify.my_target' + i + '.dest','testDest/javascript.min/' + filenameWithoutExt + 'MIN.js');
+					 	 
+						 //not add hashcode to the concated js yet
+						 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<script type="text/javascript" src="' + jsLocation + '/minLib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"></script>');
+						 destContents = destContents.replace(/\<duobei:script.*?src="lib\/(.+).js.*?".*?\/\>/g,'');
+						 destContents.replace(/\<script.*?src=".*?lib\/(.+).js.*?".*?\>\<\/script\>/g,'');
+						 
+						 fs.writeFileSync(abspath, destContents, "UTF-8");
 						 grunt.log.ok("concat js files of " + abspath + " success"); 
 						 i = i+1;
 					 }
@@ -49,6 +58,6 @@ module.exports = function(grunt){
 		
 		grunt.task.run('concat');
 		grunt.task.run('uglify');
-//		grunt.log.ok("concat and minify js finish");
+		grunt.log.ok("concat and minify js finish");
 	});
 };
