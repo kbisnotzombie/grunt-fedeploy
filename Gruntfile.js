@@ -2,9 +2,9 @@
  * grunt
  * http://gruntjs.com/
  *
- * Copyright (c) 2013 "Cowboy" Ben Alman
- * Licensed under the MIT license.
- * https://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+ * KB
+ * 
+ * https://github.com/kbisnotzombie/grunt-fedeploy
  */
 
 'use strict';
