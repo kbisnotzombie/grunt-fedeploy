@@ -81,4 +81,47 @@ module.exports = function(grunt){
 		
 		grunt.log.ok("replaceJspStatic finish");
 	});
+	
+	grunt.task.registerMultiTask('findUselessImg','a function that find out useless images', function(){
+		var dist = grunt.config.get('findUselessImg').dist;
+		var uselessNum = 0;
+		var imgNum = 0;
+		
+		grunt.file.recurse(dist.src,function(abspath, rootdir, subdir, filename){
+			var extname = path.extname(filename);
+			var imgName = filename;
+			var useful = false;
+			
+			imgNum++;
+			if(extname === '.png' || extname === '.jpg' || extname === '.gif'){//if the file is image
+				grunt.file.recurse(dist.lessDir,function(abspath, rootdir, subdir, filename){
+					var contents = fs.readFileSync(abspath, "UTF-8");
+					var matchResult = contents.match(imgName);
+					if(matchResult){
+						useful = true;
+					}
+				}); 
+				
+				grunt.file.recurse(dist.localJspDir,function(abspath, rootdir, subdir, filename){
+					var contents = fs.readFileSync(abspath, "UTF-8");
+					var matchResult = contents.match(imgName);
+					if(matchResult){
+						useful = true;
+					}
+				});
+			}
+			else{//if the file isnot image
+				useful = true;
+			}
+			if(!useful){
+				uselessNum = uselessNum + 1;
+				fs.unlinkSync(dist.src + '/' + filename);
+				grunt.log.ok(imgName + " is useless,has been deleted");
+			}
+		});
+		
+		grunt.log.ok(imgNum + " images exist");
+		grunt.log.ok(uselessNum + " images are useless");
+	});
+	
 };
