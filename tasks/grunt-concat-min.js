@@ -19,6 +19,8 @@ module.exports = function(grunt){
 //		jspSrc.forEach(function(f){
 			var ext = jspSrc.ext;
 			var jsLocation = jspSrc.jsLocation;
+			var concatJsDest = jspSrc.concatJsDest;
+			var uglifiedJsDest = jspSrc.uglifiedJsDest;
 			var i = 1;
 			
 			grunt.file.recurse(jspSrc.src,function(abspath, rootdir, subdir, filename){
@@ -41,8 +43,8 @@ module.exports = function(grunt){
 						 grunt.config.set('uglify.my_target' + i + '.src','testDest/javascript/' + filenameWithoutExt + '.js');
 						 grunt.config.set('uglify.my_target' + i + '.dest','testDest/javascript.min/' + filenameWithoutExt + 'MIN.js');
 					 	 
-						 //in dev and prod environment,we can store the uglified js files in javascript/minlib
-						 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<script type="text/javascript" src="' + jsLocation + '/minlib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"></script>');
+						 //in dev and prod environment,we can also store the uglified js files in javascript/lib
+						 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<duobei:script type="text/javascript" src="minlib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"/>');
 						 destContents = destContents.replace(/\<duobei:script.*?src="lib\/(.+).js.*?".*?\/\>/g,'');
 						 destContents = destContents.replace(/\<script.*?src=".*?lib\/(.+).js.*?".*?\>\<\/script\>/g,'');
 						 destContents = destContents.replace(/\/minlib\//,'/lib/');
