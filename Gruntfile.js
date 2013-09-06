@@ -169,6 +169,13 @@ module.exports = function(grunt) {
 	      ],
 	    }
 	},
+	findUselessImg:{
+	    	dist:{
+				src:imgDir, 
+				lessDir:localLessDir,
+				localJspDir:'WebContent/WEB-INF/jsp/portal'
+			}
+	    },
 	concatMin:{
 		jspSrc:{
 			 src: 'testDest/jsp',
