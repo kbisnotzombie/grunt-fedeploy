@@ -33,25 +33,28 @@ module.exports = function(grunt){
 						 var jsContent = getMatches(destContents,/lib\/(.+).js.*?"/g, 1);
 						 var concatedJs = [];
 						 
-						 //not set js src and uglified path
-						 jsContent.forEach(function(t){
-							 concatedJs.push('testSrc/javascript/' + t + '.js'); 
-						 });
-						 grunt.log.ok(concatedJs); 
-						 grunt.config.set('concat.dist' + i + '.src',concatedJs);
-						 grunt.config.set('concat.dist' + i + '.dest','testDest/javascript/' + filenameWithoutExt + '.js');
-						 grunt.config.set('uglify.my_target' + i + '.src','testDest/javascript/' + filenameWithoutExt + '.js');
-						 grunt.config.set('uglify.my_target' + i + '.dest','testDest/javascript.min/' + filenameWithoutExt + 'MIN.js');
-					 	 
-						 //in dev and prod environment,we can also store the uglified js files in javascript/lib
-						 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<duobei:script type="text/javascript" src="minlib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"/>');
-						 destContents = destContents.replace(/\<duobei:script.*?src="lib\/(.+).js.*?".*?\/\>/g,'');
-						 destContents = destContents.replace(/\<script.*?src=".*?lib\/(.+).js.*?".*?\>\<\/script\>/g,'');
-						 destContents = destContents.replace(/\/minlib\//,'/lib/');
+						 if(jsContent.length > 0){
+							//not set js src and uglified path
+							 jsContent.forEach(function(t){
+								 concatedJs.push('testSrc/javascript/' + t + '.js'); 
+							 });
+							 grunt.log.ok(concatedJs); 
+							 grunt.config.set('concat.dist' + i + '.src',concatedJs);
+							 grunt.config.set('concat.dist' + i + '.dest','testDest/javascript/' + filenameWithoutExt + '.js');
+							 grunt.config.set('uglify.my_target' + i + '.src','testDest/javascript/' + filenameWithoutExt + '.js');
+							 grunt.config.set('uglify.my_target' + i + '.dest','testDest/javascript.min/' + filenameWithoutExt + 'MIN.js');
+							 
+							 //in dev and prod environment,we can also store the uglified js files in javascript/lib
+							 destContents = destContents.replace(/\<duobei\:script.*?src="lib\/(.+).js.*?".*?\/\>/,'<duobei:script type="text/javascript" src="minlib/' + filenameWithoutExt + 'MIN.js" charset="utf-8"/>');
+							 destContents = destContents.replace(/\<duobei:script.*?src="lib\/(.+).js.*?".*?\/\>/g,'');
+							 destContents = destContents.replace(/\<script.*?src=".*?lib\/(.+).js.*?".*?\>\<\/script\>/g,'');
+							 destContents = destContents.replace(/\/minlib\//,'/lib/');
+							 
+							 fs.writeFileSync(abspath, destContents, "UTF-8");
+							 grunt.log.ok("concat js files of " + abspath + " success"); 
+							 i = i+1;
+						}
 						 
-						 fs.writeFileSync(abspath, destContents, "UTF-8");
-						 grunt.log.ok("concat js files of " + abspath + " success"); 
-						 i = i+1;
 					 }
 					 catch(e){
 						 grunt.log.error("compile js files of " + abspath + " fail");
