@@ -121,6 +121,10 @@ module.exports = function(grunt) {
 //	      }
 //	    }
 	},
+	clean: {
+		options: { force: true },
+		minCssSrc:[deployStaticDir+'/styles/']
+	},
 	concatMin:{
 		jspSrc:{
 //			 src: 'testDest/jsp',
@@ -148,9 +152,9 @@ module.exports = function(grunt) {
 	cssmin: {
 	  minify: {
 	    expand: true,
-	    cwd: lessBuildCssDest + '/',
+	    cwd: deployStaticDir+'/styles/',
 	    src: ['*.css'],
-	    dest: lessBuildCssDest + '/',
+	    dest:deployStaticDir+'/styles/',
 	    ext: '.min.css'
 	  }
 	},
@@ -212,12 +216,13 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('prod', ['copy:jsp', 'less', 'cssmin', 'replace', 'concatMin', 'replaceJspStatic', 'copy:copyStatic', 'changeSourceMapPath']);
-  grunt.registerTask('deploy', ['copy:jsp', 'less', 'cssmin', 'replace', 'concatMin', 'replaceJspStatic', 'copy:copyStatic', 'changeSourceMapPath','copy:depoyFront']);
+  grunt.registerTask('prod', ['copy:jsp', 'less', 'replace', 'concatMin', 'replaceJspStatic', 'clean', 'copy:copyStatic', 'cssmin', 'changeSourceMapPath']);
+  grunt.registerTask('deploy', ['copy:jsp', 'less', 'replace', 'concatMin', 'replaceJspStatic', 'clean', 'copy:copyStatic', 'cssmin', 'changeSourceMapPath','copy:depoyFront']);
   
   grunt.loadNpmTasks('grunt-contrib'); 
   grunt.loadNpmTasks('grunt-hashres');
   grunt.loadNpmTasks('grunt-smushit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   
   grunt.loadTasks( 'tasks');
 };

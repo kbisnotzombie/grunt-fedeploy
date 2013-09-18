@@ -54,13 +54,13 @@ module.exports = function(grunt){
 						 destContents = destContents.replace(/less\/(\w+).(less|css).*?"/g, 'static/styles/$1.css"')
 						                            .replace(/static\/styles\/(\w+).(less|css).*?"/g,'static/styles/$1.css"')
 						 							.replace(/src="lib\/(.+).js.*?"/g, 'src="lib/$1.js"')
-						 							.replace(/stylesheet\/less/g,'stylesheet');
+						 							.replace(/stylesheet\/less/g,'stylesheet'); 
 						 var lessContent = getMatches(destContents,/static\/styles\/(\w+).(less|css).*?"/g, 1);
 						 var jsContent = getMatches(destContents,/lib\/(.+).js.*?"/g, 1);
 						 
 						 lessContent.forEach(function(t){
-							 var hashCode = utils.md5(lessBuildCssDir+ '/' + t + '.css').slice(0, 8);
-							 destContents = destContents.replace(t + '.css', t + '.css?v=' + hashCode);
+							 var hashCode = utils.md5(lessBuildCssDir+ '/' + t + '.css').slice(0, 10);
+							 destContents = destContents.replace(t + '.css', t + '.min.css?v=' + hashCode);
 						 });
 						 destContents = destContents.replace(/static\/styles\//g,'').replace('${duobei_styles}',staticDomain+ '/styles');
 						 
@@ -123,5 +123,4 @@ module.exports = function(grunt){
 		grunt.log.ok(imgNum + " images exist");
 		grunt.log.ok(uselessNum + " images are useless");
 	});
-	
 };
