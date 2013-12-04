@@ -216,8 +216,8 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('prod', ['copy:jsp', 'less', 'replace', 'concatMin', 'replaceJspStatic', 'clean', 'copy:copyStatic', 'cssmin', 'changeSourceMapPath']);
-  grunt.registerTask('deploy', ['copy:jsp', 'less', 'replace', 'concatMin', 'replaceJspStatic', 'clean', 'copy:copyStatic', 'cssmin', 'changeSourceMapPath','copy:depoyFront']);
+  grunt.registerTask('prod', ['copy:jsp', 'less', 'replace', 'concatMin', 'replaceJspStatic', 'clean', 'copy:copyStatic', 'changeSourceMapPath']);
+  grunt.registerTask('deploy', ['copy:jsp', 'less', 'replace', 'concatMin', 'replaceJspStatic', 'clean', 'copy:copyStatic', 'changeSourceMapPath','copy:depoyFront']);
   
   grunt.loadNpmTasks('grunt-contrib'); 
   grunt.loadNpmTasks('grunt-hashres');
