@@ -115,7 +115,7 @@ module.exports = function(grunt){
 			}
 			if(!useful){
 				uselessNum = uselessNum + 1;
-				fs.unlinkSync(dist.src + '/' + filename);
+				fs.unlinkSync(abspath);
 				grunt.log.ok(imgName + " is useless,has been deleted");
 			}
 		});
